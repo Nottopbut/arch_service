@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package scoring;
+
+service ScoringService {
+  rpc GetScore (ScoreRequest) returns (ScoreResponse) {}
+}
+
+message ScoreRequest {
+  string login = 1;
+}
+
+message ScoreResponse {
+  double score = 1;
+}

@@ -1,0 +1,9 @@
+FROM python:3.10-slim
+
+WORKDIR /main
+
+COPY /default/auth.py ./
+COPY desc_pb2.py desc_pb2_grpc.py ./
+
+EXPOSE 8082
+CMD ["python", "/default/auth.py"]

@@ -1,0 +1,9 @@
+FROM python:3.10-slim
+
+WORKDIR /main
+
+COPY /default/compose.py ./
+COPY score_pb2.py score_pb2_grpc.py desc_pb2.py desc_pb2_grpc.py ./
+
+EXPOSE 8080
+CMD ["python", "/default/compose.py"]

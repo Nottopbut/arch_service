@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package decision;
+
+service DecisionService {
+  rpc Check (CheckRequest) returns (CheckResponse) {}
+}
+
+message CheckRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message CheckResponse {
+  bool allowed = 1;
+}

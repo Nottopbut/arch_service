@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Composition Service API
+  version: 1.0.0
+paths:
+  /composition:
+    post:
+      summary: Attempt to login
+      description: Given login and password, determine if user can access.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - login
+                - password
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Result of the attempt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  allowed:
+                    type: boolean
+        "400":
+          description: Bad request

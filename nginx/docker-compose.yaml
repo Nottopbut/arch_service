@@ -1,0 +1,73 @@
+version: '3.9'
+
+services:
+  scoring:
+    build:
+      context: .
+      dockerfile: Dockerfile.score
+    container_name: score
+    ports:
+      - "8081:8081"
+    environment:
+
+    networks:
+      - internal
+
+  decision:
+    build:
+      context: .
+      dockerfile: Dockerfile.auth
+    container_name: auth
+    ports:
+      - "8082:8082"
+    environment:
+
+    networks:
+      - internal
+
+  composition1:
+    build:
+      context: .
+      dockerfile: Dockerfile.compose
+    container_name: compose1
+    depends_on:
+      - score
+      - auth
+    environment:
+      SCORING_HOST: scoring:8081
+      DECISION_HOST: auth:8082
+      SCORE_THRESHOLD: 0.5
+    networks:
+      - internal
+
+  composition2:
+    build:
+      context: .
+      dockerfile: Dockerfile.compose
+    container_name: compose2
+    depends_on:
+      - score
+      - auth
+    environment:
+      SCORING_HOST: score:8081
+      DECISION_HOST: auth:8082
+      SCORE_THRESHOLD: 0.5
+    networks:
+      - internal
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_lb
+    depends_on:
+      - compose1
+      - compose2
+    ports:
+      - "8080:80"
+    volumes:
+      - ./test.conf:/etc/nginx/test.conf:ro
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
